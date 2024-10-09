@@ -148,7 +148,47 @@
 
             // Exibir os resultados detalhados e fórmulas
             document.getElementById("result").innerHTML = `
+                <strong>Índice de Frequência:</strong> ${indiceFrequencia.toFixed(4)}<br>
+                <strong>Índice de Gravidade:</strong> ${indiceGravidade.toFixed(4)}<br>
+                <strong>Índice de Custo:</strong> ${indiceCusto.toFixed(4)}
+            `;
+                
+            // Mostrar os campos para calcular o FAP
+            document.getElementById("camposFap").classList.remove("hidden");
+        }
+
+                function calcularFap() {
+            // Pegar os valores de input adicionais
+            const ordemFrequencia = parseFloat(document.getElementById("ordemFrequencia").value) || 0;
+            const ordemGravidade = parseFloat(document.getElementById("ordemGravidade").value) || 0;
+            const ordemCusto = parseFloat(document.getElementById("ordemCusto").value) || 0;
+            const totalEstabelecimentos = parseFloat(document.getElementById("totalEstabelecimentos").value) || 1;
+            const taxaRotatividade = parseFloat(document.getElementById("taxaRotatividade").value) || 0;
+
+            // Cálculo dos Percentis
+            const percentilFrequencia = ((ordemFrequencia - 1) / (totalEstabelecimentos - 1)) * 100;
+            const percentilGravidade = ((ordemGravidade - 1) / (totalEstabelecimentos - 1)) * 100;
+            const percentilCusto = ((ordemCusto - 1) / (totalEstabelecimentos - 1)) * 100;
+
+            // Cálculo do Índice Composto
+            const indiceComposto = ((0.5 * percentilGravidade) + (0.35 * percentilFrequencia) + (0.15 * percentilCusto)) * 0.02;
+
+            // Cálculo do FAP Calculado com a nova condicional
+            let fapCalculado = (indiceComposto <= 0.5) ? 0.5 : indiceComposto;
+
+            // Aplicar condicional da taxa de rotatividade
+            if (taxaRotatividade > 75 && fapCalculado < 1) {
+                fapCalculado = 1;
+            }
+
+            // Exibir os resultados
+            document.getElementById("resultFap").innerHTML = `
                 <div id="printableArea">
+                <strong>Percentil de Frequência:</strong> ${percentilFrequencia.toFixed(4)}<br>
+                <strong>Percentil de Gravidade:</strong> ${percentilGravidade.toFixed(4)}<br>
+                <strong>Percentil de Custo:</strong> ${percentilCusto.toFixed(4)}<br>
+                <strong>Índice Composto:</strong> ${indiceComposto.toFixed(4)}<br>
+                <strong>FAP Calculado:</strong> ${fapCalculado.toFixed(4)}
                     <h2>Resultados Detalhados</h2>
                     <table>
                         <tr>
@@ -177,42 +217,9 @@
                 </div>
             `;
 
-            // Mostrar os campos para calcular o FAP
-            document.getElementById("camposFap").classList.remove("hidden");
-        }
-
-        function calcularFap() {
-            const ordemFrequencia = parseFloat(document.getElementById("ordemFrequencia").value) || 0;
-            const ordemGravidade = parseFloat(document.getElementById("ordemGravidade").value) || 0;
-            const ordemCusto = parseFloat(document.getElementById("ordemCusto").value) || 0;
-
-            // Cálculo do percentil
-            const percentilFrequencia = ordemFrequencia / 100;
-            const percentilGravidade = ordemGravidade / 100;
-            const percentilCusto = ordemCusto / 100;
-
-            // Cálculo do índice composto
-            const indiceComposto = (percentilFrequencia + percentilGravidade + percentilCusto) / 3;
-
-            // Cálculo do FAP (simplesmente arredondando o índice composto)
-            const fapCalculado = Math.max(0.5, Math.min(2, indiceComposto.toFixed(4)));
-
-            // Exibir resultado do FAP
-            document.getElementById("resultFap").innerHTML = `
-                <h2>Resultado do FAP</h2>
-                <div id="printableArea">
-                    <p><strong>Percentil de Frequência:</strong> ${percentilFrequencia.toFixed(4)}</p>
-                    <p><strong>Percentil de Gravidade:</strong> ${percentilGravidade.toFixed(4)}</p>
-                    <p><strong>Percentil de Custo:</strong> ${percentilCusto.toFixed(4)}</p>
-                    <p><strong>Índice Composto:</strong> ${indiceComposto.toFixed(4)}</p>
-                    <p><strong>FAP Calculado:</strong> ${fapCalculado.toFixed(4)}</p>
-                </div>
             `;
         }
-
-        function imprimirResultado() {
-            window.print();
-        }
     </script>
+
 </body>
 </html>
