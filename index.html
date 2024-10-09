@@ -1,3 +1,6 @@
+---
+layout: default
+---
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -41,33 +44,6 @@
         .hidden {
             display: none;
         }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        /* Estilo para a área de impressão */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printableArea, #printableArea * {
-                visibility: visible;
-            }
-            #printableArea {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -109,20 +85,17 @@
     <!-- Campos adicionais aparecem após calcular -->
     <div id="camposFap" class="hidden">
         <label for="ordemFrequencia">Número Ordem Frequência:</label>
-        <input type="number" id="ordemFrequencia" placeholder="Informe o valor">
+        <input type="number" id="ordemFrequencia" placeholder="Informe o valor referente ao Rol de Frequência">
 
         <label for="ordemGravidade">Número Ordem Gravidade:</label>
-        <input type="number" id="ordemGravidade" placeholder="Informe o valor">
+        <input type="number" id="ordemGravidade" placeholder="Informe o valor referente ao Rol de Gravidade">
 
         <label for="ordemCusto">Número Ordem Custo:</label>
-        <input type="number" id="ordemCusto" placeholder="Informe o valor">
+        <input type="number" id="ordemCusto" placeholder="Informe o valor referente ao Rol de Custo">
 
         <button onclick="calcularFap()">Calcular FAP</button>
 
         <div class="result" id="resultFap"></div>
-        
-        <!-- Botão para imprimir os resultados -->
-        <button onclick="imprimirResultado()">Imprimir Resultado</button>
     </div>
 
     <script>
@@ -146,15 +119,20 @@
             // Cálculo do Índice de Custo
             const indiceCusto = (totalBeneficios / massaSalarial) * 1000;
 
-            // Exibir os resultados detalhados e fórmulas
+            // Exibir os resultados
             document.getElementById("result").innerHTML = `
                 <strong>Índice de Frequência:</strong> ${indiceFrequencia.toFixed(4)}<br>
                 <strong>Índice de Gravidade:</strong> ${indiceGravidade.toFixed(4)}<br>
-                <strong>Índice de Custo:</strong> ${indiceCusto.toFixed(4)}
+                <strong>Índicee de Custo:</strong> ${indiceCusto.toFixed(4)}
             `;
-                
-            // Mostrar os campos para calcular o FAP
+            // Exibir orientação
+            const orientacao = document.createElement("p");
+            orientacao.innerText = "Preencher os Números de Ordem de Frequência, Gravidade e Custo de acordo com o Rol dos respectivos índices do portal fapweb.";
+            document.getElementById("camposFap").insertAdjacentElement('beforebegin', orientacao);
+            `;
+            // Mostrar campos adicionais para cálculo do FAP
             document.getElementById("camposFap").classList.remove("hidden");
+            
         }
 
         function calcularFap() {
@@ -183,14 +161,11 @@
 
             // Exibir os resultados
             document.getElementById("resultFap").innerHTML = `
-                <div id="printableArea">
                 <strong>Percentil de Frequência:</strong> ${percentilFrequencia.toFixed(4)}<br>
                 <strong>Percentil de Gravidade:</strong> ${percentilGravidade.toFixed(4)}<br>
                 <strong>Percentil de Custo:</strong> ${percentilCusto.toFixed(4)}<br>
                 <strong>Índice Composto:</strong> ${indiceComposto.toFixed(4)}<br>
                 <strong>FAP Calculado:</strong> ${fapCalculado.toFixed(4)}
-            `;
-
             `;
         }
     </script>
