@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        /* Estilo para a área de impressão */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <label for="cat">Comunicação de Acidente de Trabalho (CAT):</label>
+    <input type="number" id="cat" placeholder="Informe o valor">
+
+    <label for="b91">Auxílio por incapacidade temporária (B91):</label>
+    <input type="number" id="b91" placeholder="Informe o valor">
+
+    <label for="b92">Aposentadoria por incapacidade permanente (B92):</label>
+    <input type="number" id="b92" placeholder="Informe o valor">
+
+    <label for="b93">Pensão por morte (B93):</label>
+    <input type="number" id="b93" placeholder="Informe o valor">
+
+    <label for="b94">Auxílio-acidente (B94):</label>
+    <input type="number" id="b94" placeholder="Informe o valor">
+
+    <label for="massaSalarial">Massa Salarial (R$):</label>
+    <input type="number" id="massaSalarial" placeholder="Informe o valor">
+
+    <label for="mediaVinculos">Número Médio de Vínculos:</label>
+    <input type="number" id="mediaVinculos" placeholder="Informe o valor">
+
+    <label for="totalBeneficios">Valor Total de Benefícios Pagos (R$):</label>
+    <input type="number" id="totalBeneficios" placeholder="Informe o valor">
+
+    <label for="totalEstabelecimentos">Total de Estabelecimentos na subclasse CNAE:</label>
+    <input type="number" id="totalEstabelecimentos" placeholder="Informe o valor">
+
+    <label for="taxaRotatividade">Taxa Média de Rotatividade (%):</label>
+    <input type="number" id="taxaRotatividade" placeholder="Informe o valor">
+
+    <button onclick="calcularIndices()">Calcular Índices</button>
+
+    <div class="result" id="result"></div>
+
+    <!-- Campos adicionais aparecem após calcular -->
+    <div id="camposFap" class="hidden">
+        <label for="ordemFrequencia">Número Ordem Frequência:</label>
+        <input type="number" id="ordemFrequencia" placeholder="Informe o valor">
+
+        <label for="ordemGravidade">Número Ordem Gravidade:</label>
+        <input type="number" id="ordemGravidade" placeholder="Informe o valor">
+
+        <label for="ordemCusto">Número Ordem Custo:</label>
+        <input type="number" id="ordemCusto" placeholder="Informe o valor">
+
+        <button onclick="calcularFap()">Calcular FAP</button>
+
+        <div class="result" id="resultFap"></div>
+        
+        <!-- Botão para imprimir os resultados -->
+        <button onclick="imprimirResultado()">Imprimir Resultado</button>
+    </div>
+
+    <script>
+        function calcularIndices() {
+            // Pegar os valores de input
+            const cat = parseFloat(document.getElementById("cat").value) || 0;
+            const b91 = parseFloat(document.getElementById("b91").value) || 0;
+            const b92 = parseFloat(document.getElementById("b92").value) || 0;
+            const b93 = parseFloat(document.getElementById("b93").value) || 0;
+            const b94 = parseFloat(document.getElementById("b94").value) || 0;
+            const massaSalarial = parseFloat(document.getElementById("massaSalarial").value) || 0;
+            const mediaVinculos = parseFloat(document.getElementById("mediaVinculos").value) || 1;
+            const totalBeneficios = parseFloat(document.getElementById("totalBeneficios").value) || 0;
+
+            // Cálculo do Índice de Frequência
+            const indiceFrequencia = ((b91 + b92 + b93 + b94 + cat) / mediaVinculos) * 1000;
+
+            // Cálculo do Índice de Gravidade
+            const indiceGravidade = (((b91 * 0.1) + (b92 * 0.3) + (b93 * 0.5) + (b94 * 0.1) + (cat * 0.5)) / mediaVinculos) * 1000;
+
+            // Cálculo do Índice de Custo
+            const indiceCusto = (totalBeneficios / massaSalarial) * 1000;
+
+            // Exibir os resultados detalhados e fórmulas
+            document.getElementById("result").innerHTML = `
+                <div id="printableArea">
+                    <h2>Resultados Detalhados</h2>
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Valor</th>
+                        </tr>
+                        <tr><td>Comunicação de Acidente de Trabalho (CAT)</td><td>${cat.toFixed(2)}</td></tr>
+                        <tr><td>Auxílio por incapacidade temporária (B91)</td><td>${b91.toFixed(2)}</td></tr>
+                        <tr><td>Aposentadoria por incapacidade permanente (B92)</td><td>${b92.toFixed(2)}</td></tr>
+                        <tr><td>Pensão por morte (B93)</td><td>${b93.toFixed(2)}</td></tr>
+                        <tr><td>Auxílio-acidente (B94)</td><td>${b94.toFixed(2)}</td></tr>
+                        <tr><td>Massa Salarial (R$)</td><td>${massaSalarial.toFixed(2)}</td></tr>
+                        <tr><td>Número Médio de Vínculos</td><td>${mediaVinculos.toFixed(2)}</td></tr>
+                        <tr><td>Valor Total de Benefícios Pagos (R$)</td><td>${totalBeneficios.toFixed(2)}</td></tr>
+                    </table>
+
+                    <h3>Fórmulas Utilizadas:</h3>
+                    <p><strong>Índice de Frequência (IF):</strong> (B91 + B92 + B93 + B94 + CAT) / Número Médio de Vínculos * 1000</p>
+                    <p>IF = (${b91.toFixed(2)} + ${b92.toFixed(2)} + ${b93.toFixed(2)} + ${b94.toFixed(2)} + ${cat.toFixed(2)}) / ${mediaVinculos.toFixed(2)} * 1000 = <strong>${indiceFrequencia.toFixed(4)}</strong></p>
+                    
+                    <p><strong>Índice de Gravidade (IG):</strong> ((B91 * 0.1) + (B92 * 0.3) + (B93 * 0.5) + (B94 * 0.1) + (CAT * 0.5)) / Número Médio de Vínculos * 1000</p>
+                    <p>IG = ((${b91.toFixed(2)} * 0.1) + (${b92.toFixed(2)} * 0.3) + (${b93.toFixed(2)} * 0.5) + (${b94.toFixed(2)} * 0.1) + (${cat.toFixed(2)} * 0.5)) / ${mediaVinculos.toFixed(2)} * 1000 = <strong>${indiceGravidade.toFixed(4)}</strong></p>
+                    
+                    <p><strong>Índice de Custo (IC):</strong> (Total de Benefícios Pagos / Massa Salarial) * 1000</p>
+                    <p>IC = (${totalBeneficios.toFixed(2)} / ${massaSalarial.toFixed(2)}) * 1000 = <strong>${indiceCusto.toFixed(4)}</strong></p>
+                </div>
+            `;
+
+            // Mostrar os campos para calcular o FAP
+            document.getElementById("camposFap").classList.remove("hidden");
+        }
+
+        function calcularFap() {
+            const ordemFrequencia = parseFloat(document.getElementById("ordemFrequencia").value) || 0;
+            const ordemGravidade = parseFloat(document.getElementById("ordemGravidade").value) || 0;
+            const ordemCusto = parseFloat(document.getElementById("ordemCusto").value) || 0;
+
+            // Cálculo do percentil
+            const percentilFrequencia = ordemFrequencia / 100;
+            const percentilGravidade = ordemGravidade / 100;
+            const percentilCusto = ordemCusto / 100;
+
+            // Cálculo do índice composto
+            const indiceComposto = (percentilFrequencia + percentilGravidade + percentilCusto) / 3;
+
+            // Cálculo do FAP (simplesmente arredondando o índice composto)
+            const fapCalculado = Math.max(0.5, Math.min(2, indiceComposto.toFixed(4)));
+
+            // Exibir resultado do FAP
+            document.getElementById("resultFap").innerHTML = `
+                <h2>Resultado do FAP</h2>
+                <div id="printableArea">
+                    <p><strong>Percentil de Frequência:</strong> ${percentilFrequencia.toFixed(4)}</p>
+                    <p><strong>Percentil de Gravidade:</strong> ${percentilGravidade.toFixed(4)}</p>
+                    <p><strong>Percentil de Custo:</strong> ${percentilCusto.toFixed(4)}</p>
+                    <p><strong>Índice Composto:</strong> ${indiceComposto.toFixed(4)}</p>
+                    <p><strong>FAP Calculado:</strong> ${fapCalculado.toFixed(4)}</p>
+                </div>
+            `;
+        }
+
+        function imprimirResultado() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
