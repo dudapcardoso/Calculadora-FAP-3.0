@@ -157,7 +157,7 @@
             document.getElementById("camposFap").classList.remove("hidden");
         }
 
-                function calcularFap() {
+        function calcularFap() {
             // Pegar os valores de input adicionais
             const ordemFrequencia = parseFloat(document.getElementById("ordemFrequencia").value) || 0;
             const ordemGravidade = parseFloat(document.getElementById("ordemGravidade").value) || 0;
@@ -189,32 +189,6 @@
                 <strong>Percentil de Custo:</strong> ${percentilCusto.toFixed(4)}<br>
                 <strong>Índice Composto:</strong> ${indiceComposto.toFixed(4)}<br>
                 <strong>FAP Calculado:</strong> ${fapCalculado.toFixed(4)}
-                    <h2>Resultados Detalhados</h2>
-                    <table>
-                        <tr>
-                            <th>Item</th>
-                            <th>Valor</th>
-                        </tr>
-                        <tr><td>Comunicação de Acidente de Trabalho (CAT)</td><td>${cat.toFixed(2)}</td></tr>
-                        <tr><td>Auxílio por incapacidade temporária (B91)</td><td>${b91.toFixed(2)}</td></tr>
-                        <tr><td>Aposentadoria por incapacidade permanente (B92)</td><td>${b92.toFixed(2)}</td></tr>
-                        <tr><td>Pensão por morte (B93)</td><td>${b93.toFixed(2)}</td></tr>
-                        <tr><td>Auxílio-acidente (B94)</td><td>${b94.toFixed(2)}</td></tr>
-                        <tr><td>Massa Salarial (R$)</td><td>${massaSalarial.toFixed(2)}</td></tr>
-                        <tr><td>Número Médio de Vínculos</td><td>${mediaVinculos.toFixed(2)}</td></tr>
-                        <tr><td>Valor Total de Benefícios Pagos (R$)</td><td>${totalBeneficios.toFixed(2)}</td></tr>
-                    </table>
-
-                    <h3>Fórmulas Utilizadas:</h3>
-                    <p><strong>Índice de Frequência (IF):</strong> (B91 + B92 + B93 + B94 + CAT) / Número Médio de Vínculos * 1000</p>
-                    <p>IF = (${b91.toFixed(2)} + ${b92.toFixed(2)} + ${b93.toFixed(2)} + ${b94.toFixed(2)} + ${cat.toFixed(2)}) / ${mediaVinculos.toFixed(2)} * 1000 = <strong>${indiceFrequencia.toFixed(4)}</strong></p>
-                    
-                    <p><strong>Índice de Gravidade (IG):</strong> ((B91 * 0.1) + (B92 * 0.3) + (B93 * 0.5) + (B94 * 0.1) + (CAT * 0.5)) / Número Médio de Vínculos * 1000</p>
-                    <p>IG = ((${b91.toFixed(2)} * 0.1) + (${b92.toFixed(2)} * 0.3) + (${b93.toFixed(2)} * 0.5) + (${b94.toFixed(2)} * 0.1) + (${cat.toFixed(2)} * 0.5)) / ${mediaVinculos.toFixed(2)} * 1000 = <strong>${indiceGravidade.toFixed(4)}</strong></p>
-                    
-                    <p><strong>Índice de Custo (IC):</strong> (Total de Benefícios Pagos / Massa Salarial) * 1000</p>
-                    <p>IC = (${totalBeneficios.toFixed(2)} / ${massaSalarial.toFixed(2)}) * 1000 = <strong>${indiceCusto.toFixed(4)}</strong></p>
-                </div>
             `;
 
             `;
